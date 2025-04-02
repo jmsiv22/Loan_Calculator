@@ -28,28 +28,30 @@ jobs:
               uses: actions/checkout@v4
               with:
                   fetch-depth: 0
-            - name: Use Node.js ${{ matrix.node-version }}
+
+            - name: Use Node.js
               uses: actions/setup-node@v3
               with:
-                  node-version: ${{ matrix.node-version }}
+                  node-version: 18 # Ensure a stable version
+
             - id: get-repo-values
               name: Get repository values
               run: |
-                  url=https://$(echo "${{github.repository}}" | sed "s/\//.github.io\//")
+                  url=https://$(echo "${{ github.repository }}" | sed "s/\//.github.io\//")
                   echo "url=$url" >> $GITHUB_OUTPUT
+
             - name: Update package.json homepage
               uses: jossef/action-set-json-field@v1
               with:
                   file: package.json
                   field: homepage
                   value: ${{ steps.get-repo-values.outputs.url }}
-            # create_redirects
+
             - name: Create Redirects and Links
-              id: create_redirects
               run: |
                   mkdir -p dist
                   echo "<html><head>\
-                  <meta http-equiv='refresh' content='0; URL=${{github.server_url}}/${{github.repository}}' />\
+                  <meta http-equiv='refresh' content='0; URL=${{ github.server_url }}/${{ github.repository }}' />\
                   </head><body>Redirecting to repository</body></html>" > ./dist/repo.html
 
                   mkdir -p docs
@@ -59,87 +61,48 @@ jobs:
                   echo "<html><head>\
                   <meta http-equiv='refresh' content='0; URL=docs/quick-links' />\
                   </head><body>Redirecting to quick links page</body></html>" > ./dist/quick.html
-            # Install node packages
-            - name: Install
-              id: install
-              run: |
-                  echo "<html><body><pre>" > ./dist/installation.html
-                  npm install |& tee -a ./dist/installation.html
-                  echo "</pre></body></html>" >> ./dist/installation.html
-                  echo "* [Installation](../installation.html)" >> docs/quick-links.md
-            # Run linter
+
+            - name: Install Dependencies
+              run: npm install
+
             - name: Run Linter
-              id: lint
-              run: |
-                  npm run eslint-output
-                  echo "* [Linter](../lint.html)" >> docs/quick-links.md
-            # Build the project
+              run: npm run eslint-output
+
             - name: Build the project
-              id: build
-              run: |
-                  echo "<html><body><pre>" > ./dist/build.html
-                  npm run build |& tee -a ./dist/build.html
-                  echo "</pre></body></html>" >> ./dist/build.html
-                  echo "* [Build](../build.html)" >> docs/quick-links.md
-            # Run Tests
+              run: npm run build
+
             - name: Run Tests
-              id: test
-              run: |
-                  echo "<html><body><pre>" > ./dist/tests.html
-                  npm run test -- --coverage |& tee -a ./dist/tests.html
-                  echo "</pre></body></html>" >> ./dist/tests.html
-                  echo "* [Tests](../tests.html)" >> docs/quick-links.md
-            # Verify Integrity
-            - name: Verify Integrity
-              if: ${{ !cancelled() }}
-              id: integrity
-              run: |
-                  echo "<html><body><pre>" > ./dist/integrity.html
-                  find src -type f -name "*.test.ts" -exec md5sum {} + >> ./dist/integrity.html
-                  find src -type f -name "*.test.tsx" -exec md5sum {} + >> ./dist/integrity.html
-                  md5sum .eslintrc.js >> ./dist/integrity.html
-                  md5sum jest.config.js >> ./dist/integrity.html
-                  md5sum tsconfig.json >> ./dist/integrity.html
-                  md5sum .github/workflows/deploy.yml >> ./dist/integrity.html
-                  echo "</pre></body></html>" >> ./dist/integrity.html
-                  echo "* [Integrity](../integrity.html)" >> docs/quick-links.md
-            # Create GitInspector Report
-            - name: Create GitInspector Report
-              if: ${{ !cancelled() }}
-              id: gitinspector
+              run: npm run test -- --coverage
+
+            - name: Generate GitInspector Report
               run: |
                   git clone https://github.com/jpwhite3/gitinspector.git
                   python ./gitinspector/gitinspector.py ./ --grading --format=html -f tsx,ts,html,css -x ./gitinspector -x ./node_modules -x ./wbcore > ./dist/git.html
                   echo "* [Git Inspector](../git.html)" >> docs/quick-links.md
-            # Generate HTML from Markdown in Docs/
+
             - name: Generate HTML from Markdown in Docs/
-              if: ${{ !cancelled() }}
-              id: markdown-docs
               uses: ldeluigi/markdown-docs@latest
               with:
                   src: docs
                   dst: dist/docs/
 
-            #- name: Handle Failure
-            #  run: |
-            #      echo "<html><body><h1>Build Failure</h1><p>The build failed during one of the steps.</p>" > ./dist/index.html
-            #- uses: austenstone/job-summary@v2.0
-            #  id: job-summary
-            #  with:
-            #      create-pdf: false
-            #- run: |
-            #      echo "${{ steps.job-summary.outputs.job-summary }}" >> ./dist/index.html
-            #      echo "</body></html>" >> ./dist/index.html
-            # Deploy
-            - name: Setup Pages
-              uses: actions/configure-pages@v3
-              if: ${{ !cancelled() }}
-            - name: Upload artifact
+            # ✅ FIX: Upload Build Artifacts
+            - name: Upload build artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: build-artifacts
+                  path: dist/
+
+            # ✅ FIX: Updated `upload-pages-artifact` version
+            - name: Upload artifact for deployment
               uses: actions/upload-pages-artifact@v3
-              if: ${{ !cancelled() }}
               with:
                   path: "dist/"
+
+            # Deploy to GitHub Pages
+            - name: Setup Pages
+              uses: actions/configure-pages@v3
+
             - name: Deploy to GitHub Pages
               id: deployment
               uses: actions/deploy-pages@v2
-              if: ${{ !cancelled() }}
