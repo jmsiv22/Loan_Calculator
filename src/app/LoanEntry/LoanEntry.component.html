@@ -1,0 +1,155 @@
+<div class="wrap">
+    <div class="fleft">
+        <table>
+            <tr>
+                <td >
+                    <label class="label-style" for="loan-amount">Loan Amount</label>
+                </td>
+                <td >
+                    <input type="number" id="loan-amount" />
+                </td>
+                </tr>
+                <tr>
+                <td>
+                    <label class="label-style" for="interest-rate">Interest Rate</label>
+                </td>
+                <td>
+                    <input type="number" step="0.01" id="interest-rate" />
+                </td>
+                </tr>
+                <tr>
+                <td>
+                    <label class="label-style" for="term">Loan in Years</label>
+                </td>
+                <td>
+                    <input type="number" step="1" id="term" />
+                </td>
+                </tr>
+                <tr>
+                <td>
+                    <label class="label-style" for="extra-payment">Extra Payment</label>
+                </td>
+                <td>
+                    <input type="number" step="1" id="extra-payment" />
+                </td>
+                </tr>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                    <button id="calculate-button">Calculate</button>
+                    <span id="result"></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="fright">
+        <table>
+            <tr>
+                <td>
+                    <label class="label-style" for="Scheduled-Payment">Scheduled Payment</label>
+                </td>
+                <td>
+                    <span id="Scheduled-Payment"></span>                </td>
+                    <!--Fix Me Add span, number for 'Scheduled-Payment'-->
+                </td>
+            </tr>   
+            <tr>
+                <td>
+                    <label class="label-style" for="NbrSchedPayments">Scheduled # of Payments</label>
+                </td>
+                <td>
+                        <span id="NbrSchedPayments"></span>                </td>
+
+                    <!--Fix Me Add span, number for 'NbrSchedPayments'-->
+                </td>
+            </tr>          
+            <tr>
+                <td>
+                    <label class="label-style" for="Act-Nbr-Payments">Actual # of Payments</label>
+                </td>
+                <td>
+                    <span type="number" id="Act-Nbr-Payments"></span>                </td>
+                    <!--Fix Me Add span, number for 'Act-Nbr-Payments'-->                    
+                </td>
+            </tr>                          
+            <tr>
+                <td>
+                    <label class="label-style" for="Total-Payments">Total Payments</label>
+                </td>
+                <td>
+                    <span type="number" id="Total-Payments"></span></td>
+                    <!--Fix Me Add span, number for 'Total-Payments'-->                    
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="label-style" class="label-style" for="Payments-Saved">Payments Saved</label>
+                </td>
+                <td>
+                    <span id="Payments-Saved"></span>                </td>
+                    <!--Fix Me Add span, number for 'Payments-Saved'-->                    
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="label-style" style="width: 50%" for="Total-Interest">Total Interest</label>
+                </td>
+                <td>
+                    <span id="Total-Interest"></span>                </td>
+                    <!--Fix Me Add span, number for 'Total-Interest'-->                    
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="label-style" style="width: 50%" for="Total-Interest-Saved">Total Interest Saved</label>
+                </td>
+                <td>
+                    <span id="Total-Interest-Saved"></span>                </td>
+                    <!--Fix Me Add span, number for 'Total-Interest-Saved'-->                    
+                </td>
+            </tr>            
+        </table>
+    </div>
+</div>
+
+<div class="wrap">
+<table >
+    <table style="border-width: 1px; border-color: black; border-style: solid;width:90%" >
+    <tr>
+        <td style="width: 5%;font-weight: bold;">
+            Payment #
+        </td>
+        <td style="width: 10%;font-weight: bold;" class="TextRight">
+            Beginning Balance 
+        </td>
+        <td style="width: 10%;font-weight: bold;" class="TextRight">
+            Scheduled Payment 
+        </td>
+        <td style="width: 10%;font-weight: bold;" class="TextRight">
+            Extra Payment
+        </td>
+        <td style="width: 10%;font-weight: bold;" class="TextRight">
+            Total Payment 
+        </td>
+        <td style="width: 10%;font-weight: bold;" class="TextRight">
+            Principle Amt 
+        </td>
+                <td style="width: 10%;font-weight: bold;" class="TextRight">
+            Interest Amount 
+        </td>
+        <td style="width: 10%;font-weight: bold;" class="TextRight">
+            Ending Balance 
+        </td>
+        <td style="width: 10%;font-weight: bold;" class="TextRight">
+            Cummulative Interest 
+        </td>
+    </tr>
+</table>
+    <div
+        id="idPayment">
+    </div>
+</table>
+</div>

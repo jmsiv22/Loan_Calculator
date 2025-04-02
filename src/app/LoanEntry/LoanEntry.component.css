@@ -1,0 +1,24 @@
+.wrap {
+    width: 100%;
+    overflow: auo;
+}
+
+.fleft {
+    float: left;
+    width: 50%;
+    height: 200px;
+}
+
+.fright {
+    float: right;
+    height: 200px;
+    width: 50%;
+}
+
+.label-style {
+    font-weight: bold;
+}
+
+.TextRight {
+    text-align: right;
+}
