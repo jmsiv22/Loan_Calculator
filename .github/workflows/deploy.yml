@@ -112,13 +112,12 @@ jobs:
 
             # Upload the build artifact
             - name: Upload artifact
-              uses: actions/upload-pages-artifact@v3
+              uses: actions/upload-pages-artifact@v2
               with:
                   path: "dist/"
 
             # Deploy the website to GitHub Pages
             - name: Deploy to GitHub Pages
-              id: deployment
-              uses: actions/deploy-pages@v2
+              uses: actions/deploy-pages@v3
               with:
-                  artifact-path: "dist/"
+                  token: ${{ secrets.GITHUB_TOKEN }} # This is required to deploy to GitHub Pages
